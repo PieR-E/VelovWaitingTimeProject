@@ -1,0 +1,5 @@
+﻿Accès aux données de la couche : 
+https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json
+
+Description de la structure de la couche :
+https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov.json
