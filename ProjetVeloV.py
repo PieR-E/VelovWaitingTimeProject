@@ -4,10 +4,12 @@ from pprint import pprint
 import psycopg2
 import threading
 import velovUtils
+import time
 
+# conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json'
-velovUtils.fullfillAllTable(url)
-
+velovUtils.ScrapDataJsonEveryNSeconds(url)
+print "ok"
 
 
 # page = urllib.urlopen(url)
@@ -22,7 +24,6 @@ velovUtils.fullfillAllTable(url)
 # # velovUtils.CreateTableFromStationLabel(url, station)
 # velovUtils.fullfill(url, station)
 
-print "ok"
 
 
 # # Lire url puis recup chaine JSON
