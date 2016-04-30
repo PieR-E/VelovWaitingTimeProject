@@ -72,14 +72,13 @@ def ScrapDataJsonEveryNSeconds(url):
 	while True:
 		conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 		try:
-			fullfillAllTable(url, conn)
+			FillOnlyOneTable(url, conn)
 		except: 
-		 	print "lost connexion"
+		 	print "Connexion lost"
 		 	pass
-
-
 		conn.close()
 		print 'One more!'
+		time.sleep(10)
 
 def createAllTable(url):	
 	page = urllib.urlopen(url)
@@ -100,3 +99,27 @@ def fullfillAllTable(url, conn):
 	for station in range(0,15):
 		fullfill(url, station, conn)
 		name = datajson['values'][station]['name']
+
+def FillOnlyOneTable(url, conn):
+	# page = urllib.urlopen(url)
+	# # Read data
+	# datajson = page.read()
+	# datajson = json.loads(datajson)
+	a = open('Test.json', 'r') 
+	datajson = a.read()
+	datajson = json.loads(datajson)	
+	
+	sqlInsert = "INSERT INTO velovData (station_name, available_bikes, last_update) values ( "
+	
+	stationCount=len(datajson['values'])
+	for station in range(0, stationCount):		
+		# Recover value et prepare sql insert
+		availbike = datajson['values'][station]['available_bikes']
+		lastupdate = datajson['values'][station]['last_update']
+		name = toValidTableName(datajson['values'][station]['name'].encode('latin-1'))
+		sqlInsert = sqlInsert + str(station) + ", " + availbike + ", '" + lastupdate + "'), ("
+	sqlInsert = sqlInsert[0:-3]
+	
+	cur = conn.cursor()
+	cur.execute(sqlInsert)
+	conn.commit()

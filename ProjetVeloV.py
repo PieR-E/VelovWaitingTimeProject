@@ -6,9 +6,10 @@ import threading
 import velovUtils
 import time
 
-# conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
+conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json'
-velovUtils.ScrapDataJsonEveryNSeconds(url)
+# velovUtils.ScrapDataJsonEveryNSeconds(url)
+velovUtils.FillTable(url, conn)
 print "ok"
 
 
