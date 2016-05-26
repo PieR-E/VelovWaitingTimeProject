@@ -17,8 +17,8 @@ print sys.version
 conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json'
 # velovUtils.createStationLabelsCorrespondance(url, conn)
-# sqlSelect = "select * from velovdata where last_update> '03/05/2016' and station_name = 11"
-sqlSelect = "select distinct last_update, available_bike_stands  from velovdata where station_name = 11 and  ( extract(HOUR FROM last_update_fme) = 19 or extract(HOUR FROM last_update_fme) = 20 or extract(HOUR FROM last_update_fme) = 21 ) order by last_update"
+sqlSelect = "select distinct last_update, available_bike_stands from velovdata where last_update> '01/05/2016' and station_name = 11 order by last_update"
+# sqlSelect = "select distinct last_update, available_bike_stands  from velovdata where station_name = 111 and  ( extract(HOUR FROM last_update_fme) = 19 or extract(HOUR FROM last_update_fme) = 20 or extract(HOUR FROM last_update_fme) = 21 ) order by last_update"
 sqlSelectName = "select column_name from information_schema.columns where table_name = 'velovdata'"
 # sqlSelect = "select * from velovdata where station_name = 11 and  ( extract(HOUR FROM last_update_fme) = 20 or extract(HOUR FROM last_update_fme) = 21 ) and (last_update_fme > '2016-05-08')"
 cur = conn.cursor()
@@ -48,6 +48,7 @@ e = timedelta(seconds = 30)
 
 # First add column for duration betweento update
 duration = [timedelta(seconds = 0)]+ tmp
+duration = list(duration[i].total_seconds() for i in range(0,len(duration)))
 dataAsDF = pd.concat([dataAsDF, pd.DataFrame(duration)], axis=1)
 
 #labels = ['last_update', 'available_bike_stands', 'duration']
@@ -56,12 +57,20 @@ dataAsDF = pd.concat([dataAsDF, pd.DataFrame(duration)], axis=1)
 
 # Then specify if update is valid
 isValidUpdate = [False] +list( (tmp[i] < TenMinuts)  for i in range(0, len(tmp)))
-dataFinal = list( data[i] + (isValidUpdate[i],) + (duration[i].total_seconds(),) for i in range(0,len(isValidUpdate)))
+
+correctDuration = duration
+for Ocursor in range(0, len(isValidUpdate)-1):
+    if isValidUpdate[Ocursor] == False and duration[Ocursor] > 0 and duration[Ocursor] < 650:
+        correctDuration[Ocursor+1] = duration[Ocursor+1] + duration[Ocursor]
+
+dataFinal = list( data[i] + (isValidUpdate[i],) + (duration[i],) + (correctDuration[i],) for i in range(0,len(isValidUpdate)))
+
 dataFinal= pd.DataFrame(dataFinal)
-labels = ['last_update', 'available_bike_stands', 'isvalidupdate', 'duration']
+labels = ['last_update', 'available_bike_stands', 'isvalidupdate', 'duration', 'correctedDuration']
 for Ocolumns in range(0, len(labels)):
     dataFinal = dataFinal.rename(columns = {Ocolumns : labels[Ocolumns]})
 
+
 test = dataFinal.loc[dataFinal['available_bike_stands'] == 0]
 test = test.loc[test['isvalidupdate'] == True]
-plt.hist(list(test.duration), 20)
+plt.hist(list(test.duration), 50)
