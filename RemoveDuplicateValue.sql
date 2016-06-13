@@ -1,0 +1,2 @@
+﻿INSERT INTO velovdatatemp (station_name, available_bikes, last_update, last_update_fme, status, bike_stands, available_bike_stands, availabilitycode)
+select distinct station_name, available_bikes, last_update, last_update_fme, status, bike_stands, available_bike_stands, availabilitycode from velovdata
