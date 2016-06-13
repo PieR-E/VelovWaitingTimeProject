@@ -17,7 +17,7 @@ print sys.version
 conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json'
 # velovUtils.createStationLabelsCorrespondance(url, conn)
-sqlSelect = "select distinct last_update, available_bike_stands from velovdata where last_update> '01/05/2016' and station_name = 11 order by last_update"
+sqlSelect = "select distinct last_update, available_bike_stands from velovdatatemp where last_update> '01/05/2016' and station_name = 11 order by last_update"
 # sqlSelect = "select distinct last_update, available_bike_stands  from velovdata where station_name = 111 and  ( extract(HOUR FROM last_update_fme) = 19 or extract(HOUR FROM last_update_fme) = 20 or extract(HOUR FROM last_update_fme) = 21 ) order by last_update"
 sqlSelectName = "select column_name from information_schema.columns where table_name = 'velovdata'"
 # sqlSelect = "select * from velovdata where station_name = 11 and  ( extract(HOUR FROM last_update_fme) = 20 or extract(HOUR FROM last_update_fme) = 21 ) and (last_update_fme > '2016-05-08')"
@@ -73,4 +73,5 @@ for Ocolumns in range(0, len(labels)):
 
 test = dataFinal.loc[dataFinal['available_bike_stands'] == 0]
 test = test.loc[test['isvalidupdate'] == True]
-plt.hist(list(test.duration), 50)
+plt.hist(list(test.duration), 200)
+plt.show()
