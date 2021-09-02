@@ -21,7 +21,7 @@ station = 11
 conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 sqlSelect = "select lat, lng from stationlabel where station_name =" + str(station)
 
-	# Retrieve all data for station at given hour into a pandas.dataFrame style variable data#
+# Retrieve all data for station at given hour into a pandas.dataFrame style variable data#
 cur = conn.cursor()
 cur.execute(sqlSelect)
 data = cur.fetchall()
