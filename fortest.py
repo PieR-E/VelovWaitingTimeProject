@@ -20,8 +20,6 @@ conn = psycopg2.connect(database = "velov", user = "postgres", password = "", ho
 url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json'
 # velovUtils.createStationLabelsCorrespondance(url, conn)
 
-# sqlSelect = "select distinct last_update, available_bike_stands from velovdatatemp where last_update> '01/05/2016' and station_name = 11 and  ( extract(HOUR FROM last_update_fme) = 19) order by last_update"
-# sqlSelect = "select distinct last_update, available_bike_stands  from velovdatatemp where station_name = 11 and  ( extract(HOUR FROM last_update_fme) = 0 or extract(HOUR FROM last_update_fme) = 1 or extract(HOUR FROM last_update_fme) = 2 ) order by last_update"
 sqlSelect = "select distinct last_update, available_bike_stands  from velovdatatemp where station_name = 11 and extract(HOUR FROM last_update_fme) = 20 order by last_update"
 # sqlSelect = "select distinct last_update, available_bike_stands from velovdatatemp where station_name = 11 order by last_update"
 
