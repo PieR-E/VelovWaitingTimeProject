@@ -38,7 +38,6 @@ CREATE TABLE stations_hours (
     PRIMARY KEY (station_id, hour)
 );
 
-
 ALTER TABLE stations OWNER TO dev;
 ALTER TABLE stations_data OWNER TO dev;
 ALTER TABLE stations_hours OWNER TO dev;
