@@ -14,8 +14,6 @@ import pandas as pd
 import sys
 from datetime import timedelta
 
-
-print sys.version
 conn = psycopg2.connect(database = "velov", user = "postgres", password = "", host = "localhost" ,port = "5432")
 url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.json'
 # velovUtils.createStationLabelsCorrespondance(url, conn)
@@ -77,8 +75,6 @@ labels = ['last_update', 'available_bike_stands', 'isvalidupdate', 'duration', '
 for Ocolumns in range(0, len(labels)):
     dataFinal = dataFinal.rename(columns = {Ocolumns : labels[Ocolumns]})
 
-
-
 ## Test 0 : do some plot
 test = dataFinal.loc[dataFinal['available_bike_stands'] == 0]
 test = test.loc[test['isvalidupdate'] == True]
@@ -87,17 +83,13 @@ test = test.loc[test['isvalidupdate'] == True]
 # Therefore  waiting time which are lower than 10 seconds are unavailable
 test = test.loc[test['correctedDuration'] > 10]
 
-
 # test = test.loc[test['correctedDuration'] < 200]
 
 # plt.hist(list(test.correctedDuration), 100)
 
-
 longestTime= test.loc[test['correctedDuration'] > 300]
 
 ## Test 1 : consider X like the number of minuts it's necessaryt to wait forand test if it's follow poisson law
-
-
 
 isPoisson = dataFinal.loc[dataFinal['available_bike_stands'] == 0]
 isPoisson = isPoisson.loc[isPoisson['isvalidupdate'] == True]
@@ -134,5 +126,3 @@ print(expweibulltest)
 
 p = sc.probplot(dd, dist = sc.exponweib, sparams =(estim[0], estim[1], estim[2], estim[3]), fit = True, plot=plt)
 plt.show()
-
-

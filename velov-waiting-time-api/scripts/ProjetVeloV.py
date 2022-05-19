@@ -8,7 +8,7 @@ import velovUtils
 import time
 
 conn = psycopg2.connect(database = "velov",
-                        user = "postgres",
+                        user = "dev",
                         password = "velov",
                         host = "localhost",
                         port = "5432")
