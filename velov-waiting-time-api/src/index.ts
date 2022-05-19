@@ -1,18 +1,23 @@
-import 'dotenv/config';
+import 'dotenv-flow/config';
 import express from 'express'
 import cors from 'cors'
 import {ExceptionsHandler} from '~/middlewares/exceptions.handler';
 import {UnknownRoutesHandler} from '~/middlewares/unknownRoutes.handler'
 import {StationsController} from '~/resources/stations/stations.controller';
-import {StationHoursController} from '~/resources/stationHours/stationHours.controller';
+import {StationsHoursController} from '~/resources/stationsHours/stationsHours.controller';
 
-require('dotenv').config();
+require('dotenv-flow').config(
+    {
+        purge_dotenv: true,
+        silent: true
+    }
+);
 
 const app = express()
 app.use(cors())
 
 app.use('/stations', StationsController)
-app.use('/station-hours', StationHoursController)
+app.use('/stations-hours', StationsHoursController)
 
 app.all('*', UnknownRoutesHandler)
 app.use(ExceptionsHandler)

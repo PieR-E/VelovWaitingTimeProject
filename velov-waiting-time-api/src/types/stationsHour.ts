@@ -1,4 +1,4 @@
-export interface StationHour {
+export interface StationsHour {
     station_id: number,
     hour: number,
     exponentiation?: number,

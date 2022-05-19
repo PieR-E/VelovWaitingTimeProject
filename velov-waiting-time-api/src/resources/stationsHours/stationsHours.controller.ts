@@ -1,13 +1,14 @@
 import {Router} from 'express'
-import {StationHoursService} from '~/resources/stationHours/stationHours.service'
+import {StationsHoursService} from '~/resources/stationsHours/stationsHours.service'
 import {BadRequestException, NotFoundException} from '~/utils/exceptions'
 
-const StationHoursController = Router()
-const service = new StationHoursService()
+const StationsHoursController = Router()
+const service = new StationsHoursService()
 
 /* Find All */
-StationHoursController.get('/', async (req, res, next) => {
+StationsHoursController.get('/', async (req, res, next) => {
     try {
+        console.log('controller')
         return res
             .status(200)
             .json(await service.findAll())
@@ -17,7 +18,7 @@ StationHoursController.get('/', async (req, res, next) => {
 })
 
 /* Find Hours By Station */
-StationHoursController.get('/:id', async (req, res, next) => {
+StationsHoursController.get('/:id', async (req, res, next) => {
     try {
         const id = Number(req.params.id)
 
@@ -39,7 +40,7 @@ StationHoursController.get('/:id', async (req, res, next) => {
 })
 
 /* Find One Station-Hour */
-StationHoursController.get('/:id/:hour', async (req, res, next) => {
+StationsHoursController.get('/:id/:hour', async (req, res, next) => {
     try {
         const id = Number(req.params.id);
         const hour = Number(req.params.hour);
@@ -64,4 +65,4 @@ StationHoursController.get('/:id/:hour', async (req, res, next) => {
     }
 })
 
-export {StationHoursController}
+export {StationsHoursController}
