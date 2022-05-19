@@ -1,0 +1,19 @@
+TODO:
+
+Data/Python :
+    - rename tables in kebab-case
+        - stations
+            - add fields address, code_insee, commune
+            - move column bike_stands from stations-data to stations
+        - stations-data
+        - station-hours
+    - rename station_name to station_id
+    - add foreign key constraints for station_id (when useful)
+    - add table station-hours
+        - station_id (FK)       | +
+        - hour                  | PK Composite, UNIQUE, INDEX
+        - 4 statistical params
+    - save all these creation steps as a SQL script
+    - delete duplicate entries when calculating monthly
+    - send mail to ask what last_update_fme, gl, availability_code, etc... is used for
+    
