@@ -22,6 +22,7 @@ def toValidTableName(name):
     name = name.replace(u"-", "")
     name = name.replace(u"é", "")
     name = name.replace(u"è", "")
+    name = name.replace(u"'", "")
     return name
 
 def ScrapDataJsonEveryNSeconds(url, N):
@@ -49,22 +50,20 @@ def FillOnlyOneTable(url, conn):
             attempt = attempt - 1
     if attempt > 0:
 
-        sqlInsert = "INSERT INTO velovData (station_name, available_bikes, last_update, last_update_fme, status, bike_stands, available_bike_stands, availabilitycode) values ( "
+        sqlInsert = "INSERT INTO stations_data (station_id, available_bikes, last_update, last_update_fme, status, available_bike_stands, availabilitycode) values ( "
 
         stationCount = len(datajson['values'])
         for station in range(0, stationCount):
             # Recover value et prepare sql insert
-            address = str(datajson['values'][station]['address'])
             availbike = str(datajson['values'][station]['available_bikes'])
             lastupdate = datajson['values'][station]['last_update']
             lastupdatefme = datajson['values'][station]['last_update_fme']
             status = datajson['values'][station]['status']
-            bikestands = str(datajson['values'][station]['bike_stands'])
             availbikestands = str(datajson['values'][station]['available_bike_stands'])
             availabilitycode = str(datajson['values'][station]['availabilitycode'])
 
             sqlInsert = sqlInsert + str(
-                station) + ", " + availbike + ", '" + lastupdate + "', '" + lastupdatefme + "', '" + status + "', " + bikestands + ", " + availbikestands + ", " + availabilitycode + "), ("
+                station) + ", " + availbike + ", '" + lastupdate + "', '" + lastupdatefme + "', '" + status + "', " + availbikestands + ", " + availabilitycode + "), ("
 
         sqlInsert = sqlInsert[0:-3]
 
@@ -75,22 +74,41 @@ def FillOnlyOneTable(url, conn):
         print("Impossible to establish connexion")
 
 def createStationLabelsCorrespondance(url, conn):
-    page = urllib.urlopen(url)
+    page = urllib.request.urlopen(url)
     datajson = page.read()
     datajson = json.loads(datajson)
     stationCount = len(datajson['values'])
     for station in range(0, stationCount):
+        address = str(datajson['values'][station]['address'])
+        code_insee = str(datajson['values'][station]['code_insee'])
+        commune = str(datajson['values'][station]['commune'])
+        bikestands = str(datajson['values'][station]['bike_stands'])
         lat = datajson['values'][station]['lat']
         lng = datajson['values'][station]['lng']
         number = datajson['values'][station]['number']
         name = datajson['values'][station][u'name']
+
         if name is not None:
             name = toValidTableName(name)
         else:
             name = ''
 
-        sqlInsert = 'insert into stationLabel (station_name, name, number, lat, lng) values (' + str(
-            station) + ", '" + toValidTableName(name) + "', " + number + ", " + lat + ", " + lng + ")"
+        if address is not None:
+            address = toValidTableName(address)
+        else: 
+            address = ''
+
+        if commune is not None:
+            commune = toValidTableName(commune)
+        else: 
+            commune = ''
+
+        if code_insee == 'None':
+            code_insee = 0
+        
+        sqlInsert = 'insert into stations (station_id, name, number, lat, lng, bike_stands, address, code_insee, commune) values (' + str(
+            station) + ", '" + toValidTableName(name) + "', " + str(number) + ", " + str(lat) + ", " + str(lng) + ", " + str(bikestands) + ", '" + toValidTableName(address) + "', " + str(code_insee) + ", '" + toValidTableName(commune) + "')"
+
         cur = conn.cursor()
         cur.execute(sqlInsert)
         conn.commit()
