@@ -1,5 +1,6 @@
 # coding: utf8 
 import urllib
+import urllib.request
 import json
 from pprint import pprint
 import psycopg2
@@ -26,7 +27,7 @@ def toValidTableName(name):
 def ScrapDataJsonEveryNSeconds(url, N):
     while True:
         conn = psycopg2.connect(database="velov",
-                                user="postgres",
+                                user="dev",
                                 password="velov",
                                 host="localhost",
                                 port="5432")
@@ -43,7 +44,8 @@ def FillOnlyOneTable(url, conn):
             datajson = page.read()
             datajson = json.loads(datajson)
             break
-        except:
+        except Exception as e:
+            print(e)
             attempt = attempt - 1
     if attempt > 0:
 
@@ -52,6 +54,7 @@ def FillOnlyOneTable(url, conn):
         stationCount = len(datajson['values'])
         for station in range(0, stationCount):
             # Recover value et prepare sql insert
+            address = str(datajson['values'][station]['address'])
             availbike = str(datajson['values'][station]['available_bikes'])
             lastupdate = datajson['values'][station]['last_update']
             lastupdatefme = datajson['values'][station]['last_update_fme']
