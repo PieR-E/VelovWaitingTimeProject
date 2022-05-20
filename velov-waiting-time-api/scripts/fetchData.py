@@ -1,5 +1,4 @@
 # coding: utf8 
-from pprint import pprint
 import psycopg2
 import urllib
 import urllib.request
