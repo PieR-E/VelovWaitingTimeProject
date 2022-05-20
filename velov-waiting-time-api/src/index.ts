@@ -16,6 +16,16 @@ require('dotenv-flow').config(
 const app = express()
 app.use(cors())
 
+const homePage = '<div style="margin: auto">' +
+    '<h1 style="text-align: center">Velov Waiting Time API</h1>' +
+    '<ul><b>Controllers</b>' +
+    '<li><a href="/stations">stations</a></li>' +
+    '<li><a href="/stations-hours">stations-hours</a></li>' +
+    '</ul></div>'
+app.get('/', (req, res) => {
+    return res.send(homePage);
+})
+
 app.use('/stations', StationsController)
 app.use('/stations-hours', StationsHoursController)
 
