@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "dev": "nodemon --watch src -e js.ts.json --exec \"ts-node src/index.ts\"",
     "build": "tsup src/index.ts --format cjs --clean",
-    "start": "node dist/index.js"
+    "start": "npm run build && node dist/index.js",
+    "start:nodemon": "./node_modules/nodemon/bin/nodemon.js"
   },
   "keywords": [],
   "author": "",

@@ -8,7 +8,6 @@ const service = new StationsHoursService()
 /* Find All */
 StationsHoursController.get('/', async (req, res, next) => {
     try {
-        console.log('controller')
         return res
             .status(200)
             .json(await service.findAll())
