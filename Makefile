@@ -11,7 +11,7 @@ api-start: ## Start Express Api
 	npm --prefix ./velov-waiting-time-api/ run start
 
 api-dev: ## Start Express Api in dev mode
-	npm --prefix ./velov-waiting-time-api/ run dev
+	npm --prefix ./velov-waiting-time-api/ run start:nodemon
 
 # React App (Frontend)
 app-build: ## Build React App
