@@ -1,7 +1,4 @@
 import psycopg2
-import urllib
-import json
-import populateStations
 import pandas as pd
 from datetime import timedelta
 import datetime
