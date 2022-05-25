@@ -39,4 +39,11 @@ def createStationHours(url, conn):
         cur.execute(sqlInsert)
         conn.commit()
 
+sqlDropStationsHours = "DROP TABLE stations_hours"
+sqlCreateStationsHours = "CREATE TABLE stations_hours (station_id integer, hour integer, exponentiation numeric, shape numeric, loc numeric, scale numeric, PRIMARY KEY(station_id, hour))"
+cur = conn.cursor()
+cur.execute(sqlDropStationsHours)
+cur.execute(sqlCreateStationsHours)
+conn.commit()
+
 createStationHours(url, conn)

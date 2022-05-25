@@ -56,14 +56,14 @@ def createStationLabelsCorrespondance(url, conn):
             code_insee = 0
         
         sqlInsert = 'insert into stations (station_id, name, number, lat, lng, bike_stands, address, code_insee, commune) values (' + str(
-            number) + ", '" + f'{name}' + "', " + str(number) + ", " + str(lat) + ", " + str(lng) + ", " + str(bikestands) + ", '" + f'{address}' + "', " + str(code_insee) + ", '" + f'{commune}' + "')"
+            number) + ", '" + f'{name}' + "', " + str(number) + ", " + lat + ", " + lng + ", " + str(bikestands) + ", '" + f'{address}' + "', " + str(code_insee) + ", '" + f'{commune}' + "')"
 
         cur = conn.cursor()
         cur.execute(sqlInsert)
         conn.commit()
 
 sqlDropStations = "DROP TABLE stations"
-sqlCreateStations = "CREATE TABLE stations (station_id integer PRIMARY KEY, name character varying(50), number integer, lat integer, lng integer, bike_stands integer, address character varying(50), code_insee integer, commune character varying(20))"
+sqlCreateStations = "CREATE TABLE stations (station_id integer PRIMARY KEY, name character varying(50), number integer, lat numeric, lng numeric, bike_stands integer, address character varying(50), code_insee integer, commune character varying(20))"
 cur = conn.cursor()
 cur.execute(sqlDropStations)
 cur.execute(sqlCreateStations)
