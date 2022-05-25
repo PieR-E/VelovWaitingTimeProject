@@ -31,8 +31,3 @@ cur.execute(sqlCreateStationsHours)
 cur.execute(sqlCreateStationsData)
 cur.execute(sqlCreateStations)
 conn.commit()
-
-# Populate stations
-populateStations.createStationLabelsCorrespondance(url, conn)
-
-print('all good')
