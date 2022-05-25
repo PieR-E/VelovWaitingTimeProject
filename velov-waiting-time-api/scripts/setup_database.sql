@@ -2,7 +2,6 @@
 
 CREATE DATABASE velovTest;
 CREATE USER dev PASSWORD 'velov';
-\c velov;
 
 CREATE TABLE stations_data ( station_id integer, available_bikes integer, last_update timestamp without time zone, last_update_fme timestamp without time zone, status character varying(20), available_bike_stands integer, availabilitycode integer );
 

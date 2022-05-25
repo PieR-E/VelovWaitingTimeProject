@@ -16,12 +16,11 @@ from datetime import timedelta
 
 def toValidTableName(name):
     name = name.replace(u"/", "")
-    name = name.replace(u" ", "")
     name = name.replace(u"&", "")
     name = name.replace(u"'", "")
     name = name.replace(u"-", "")
-    name = name.replace(u"é", "")
-    name = name.replace(u"è", "")
+    name = name.replace(u"é", "e")
+    name = name.replace(u"è", "e")
     name = name.replace(u"'", "")
     return name
 
@@ -53,17 +52,29 @@ def FillOnlyOneTable(url, conn):
         sqlInsert = "INSERT INTO stations_data (station_id, available_bikes, last_update, last_update_fme, status, available_bike_stands, availabilitycode) values ( "
 
         stationCount = len(datajson['values'])
+
+        # fileJson = open("data.json", "w")
+        # json.dump(datajson, fileJson)
+        # fileJson.close()
+
         for station in range(0, stationCount):
             # Recover value et prepare sql insert
             availbike = str(datajson['values'][station]['available_bikes'])
+
             lastupdate = datajson['values'][station]['last_update']
             lastupdatefme = datajson['values'][station]['last_update_fme']
             status = datajson['values'][station]['status']
             availbikestands = str(datajson['values'][station]['available_bike_stands'])
             availabilitycode = str(datajson['values'][station]['availabilitycode'])
+            station_id = datajson['values'][station]['number']
+
+            # if station_id == 10059:
+            #     print(datajson['values'][station]['number'])
+            #     print(availbike)
+            #     print(datajson['values'][station]['available_bikes'])
 
             sqlInsert = sqlInsert + str(
-                station) + ", " + availbike + ", '" + lastupdate + "', '" + lastupdatefme + "', '" + status + "', " + availbikestands + ", " + availabilitycode + "), ("
+                station_id) + ", " + availbike + ", '" + lastupdate + "', '" + lastupdatefme + "', '" + status + "', " + availbikestands + ", " + availabilitycode + "), ("
 
         sqlInsert = sqlInsert[0:-3]
 

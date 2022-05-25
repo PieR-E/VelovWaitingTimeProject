@@ -14,17 +14,15 @@ url = 'https://download.data.grandlyon.com/ws/rdata/jcd_jcdecaux.jcdvelov/all.js
 
 def toValidTableName(name):
     name = name.replace(u"/", "")
-    name = name.replace(u" ", "")
     name = name.replace(u"&", "")
     name = name.replace(u"'", "")
     name = name.replace(u"-", "")
-    name = name.replace(u"é", "")
-    name = name.replace(u"è", "")
+    name = name.replace(u"é", "e")
+    name = name.replace(u"è", "e")
     name = name.replace(u"'", "")
     return name
 
 def createStationLabelsCorrespondance(url, conn):
-    print('hello')
     page = urllib.request.urlopen(url)
     datajson = page.read()
     datajson = json.loads(datajson)
@@ -58,10 +56,17 @@ def createStationLabelsCorrespondance(url, conn):
             code_insee = 0
         
         sqlInsert = 'insert into stations (station_id, name, number, lat, lng, bike_stands, address, code_insee, commune) values (' + str(
-            station) + ", '" + toValidTableName(name) + "', " + str(number) + ", " + str(lat) + ", " + str(lng) + ", " + str(bikestands) + ", '" + toValidTableName(address) + "', " + str(code_insee) + ", '" + toValidTableName(commune) + "')"
+            number) + ", '" + f'{name}' + "', " + str(number) + ", " + str(lat) + ", " + str(lng) + ", " + str(bikestands) + ", '" + f'{address}' + "', " + str(code_insee) + ", '" + f'{commune}' + "')"
 
         cur = conn.cursor()
         cur.execute(sqlInsert)
         conn.commit()
+
+sqlDropStations = "DROP TABLE stations"
+sqlCreateStations = "CREATE TABLE stations (station_id integer PRIMARY KEY, name character varying(50), number integer, lat integer, lng integer, bike_stands integer, address character varying(50), code_insee integer, commune character varying(20))"
+cur = conn.cursor()
+cur.execute(sqlDropStations)
+cur.execute(sqlCreateStations)
+conn.commit()
 
 createStationLabelsCorrespondance(url, conn)
