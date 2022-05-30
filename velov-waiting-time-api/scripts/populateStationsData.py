@@ -59,9 +59,8 @@ def FillOnlyOneTable(url, conn):
         # fileJson.close()
 
         for station in range(0, stationCount):
-            # Recover value et prepare sql insert
+            # Recover values and prepare sql insert
             availbike = str(datajson['values'][station]['available_bikes'])
-
             lastupdate = datajson['values'][station]['last_update']
             lastupdatefme = datajson['values'][station]['last_update_fme']
             status = datajson['values'][station]['status']
@@ -69,13 +68,10 @@ def FillOnlyOneTable(url, conn):
             availabilitycode = str(datajson['values'][station]['availabilitycode'])
             station_id = datajson['values'][station]['number']
 
-            # if station_id == 10059:
-            #     print(datajson['values'][station]['number'])
-            #     print(availbike)
-            #     print(datajson['values'][station]['available_bikes'])
-
-            sqlInsert = sqlInsert + str(
-                station_id) + ", " + availbike + ", '" + lastupdate + "', '" + lastupdatefme + "', '" + status + "', " + availbikestands + ", " + availabilitycode + "), ("
+            address = datajson['values'][station]['address']
+            if address is not None:
+                sqlInsert = sqlInsert + str(
+                    station_id) + ", " + availbike + ", '" + lastupdate + "', '" + lastupdatefme + "', '" + status + "', " + availbikestands + ", " + availabilitycode + "), ("
 
         sqlInsert = sqlInsert[0:-3]
 
@@ -85,11 +81,11 @@ def FillOnlyOneTable(url, conn):
     else:
         print("Impossible to establish connexion")
 
-sqlDropStationsData = "DROP TABLE stations_data"
-sqlCreateStationsData = "CREATE TABLE stations_data ( station_id integer, available_bikes integer, last_update timestamp without time zone, last_update_fme timestamp without time zone, status character varying(20), available_bike_stands integer, availabilitycode integer )"
-cur = conn.cursor()
-cur.execute(sqlDropStationsData)
-cur.execute(sqlCreateStationsData)
-conn.commit()
+# sqlDropStationsData = "DROP TABLE stations_data"
+# sqlCreateStationsData = "CREATE TABLE stations_data ( station_id integer, available_bikes integer, last_update timestamp without time zone, last_update_fme timestamp without time zone, status character varying(20), available_bike_stands integer, availabilitycode integer )"
+# cur = conn.cursor()
+# cur.execute(sqlDropStationsData)
+# cur.execute(sqlCreateStationsData)
+# conn.commit()
 
 ScrapDataJsonEveryNSeconds(url, 15)
